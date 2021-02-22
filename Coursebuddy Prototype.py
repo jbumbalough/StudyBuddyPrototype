@@ -83,7 +83,7 @@ knn.score(x_test, y_test)*100
 
 
 ##Predicting each of the grade items, based on all other grade items for all students
-features = ['Class Participation [100]', 'HW#1 [100]', 'HW#2 [100]', 'HW#3 [100]', 'Test#1 [100]', 'Test#2 [100]', 'Test#3 [100]', 'FinalExam [300]', 'Course Grade']
+features = ['Class Participation [100]', 'HW#1 [100]', 'Test#1 [100]', 'HW#2 [100]', 'Test#2 [100]', 'HW#3 [100]', 'Test#3 [100]', 'FinalExam [300]', 'Course Grade']
 
 for i in features:
     print(i)
@@ -96,24 +96,89 @@ for i in features:
     print(knn.score(x_test, y_test)*100)
 
 
-# In[22]:
+# In[9]:
+
+
+def acc(obs, accept):
+    return abs(((obs - accept) / accept) * 100)
+
+
+# In[10]:
+
+
+def predict(original):
+    copy = original.copy()
+    features = ['Class Participation [100]', 'HW#1 [100]', 'Test#1 [100]', 'HW#2 [100]', 'Test#2 [100]', 'HW#3 [100]', 'Test#3 [100]', 'FinalExam [300]', 'Course Grade']
+    for i in features:
+        print("Feature: ", i)
+        x_train, x_test, y_train, y_test = train_test_split(dfr.drop(['S#', i], axis=1), dfr[i])
+        x_test = copy.drop(['S#', i], axis=1)
+        #y_test = a_final[i]
+        #print("x: ", x_test)
+        #print("y: ", y_test)
+        knn = KNeighborsClassifier(n_neighbors = 5, p = 2)
+        knn.fit(x_train, y_train)
+        pred = knn.predict(x_test)
+        print("Prediction: ", pred)
+        #for j in a_final[i]:
+            #print("Expected: ", j)
+            #print("PE: ", acc(pred, j))
+        copy[i] = pred
+        print("\n===============\n")
+
+
+# In[11]:
+
+
+a_original = pd.DataFrame({'S#' : [100], 'Prerequisite 1': [5], 'Prerequisite 2': [5], 'Prerequisite 3': [5], 'Class Participation [100]' : [0], 'HW#1 [100]' : [0], 'HW#2 [100]' : [0], 'HW#3 [100]' : [0], 'Test#1 [100]' : [0], 'Test#2 [100]' : [0], 'Test#3 [100]' : [0], 'FinalExam [300]' : [0], 'Course Grade' : [0]})
+predict(a_original)
+
+
+# In[12]:
+
+
+b_original = pd.DataFrame({'S#' : [101], 'Prerequisite 1': [4], 'Prerequisite 2': [4], 'Prerequisite 3': [4], 'Class Participation [100]' : [0], 'HW#1 [100]' : [0], 'HW#2 [100]' : [0], 'HW#3 [100]' : [0], 'Test#1 [100]' : [0], 'Test#2 [100]' : [0], 'Test#3 [100]' : [0], 'FinalExam [300]' : [0], 'Course Grade' : [0]})
+predict(b_original)
+
+
+# In[13]:
 
 
 ##Predicting each of the grade items over time, based on available previous data
-#Todo
-a_std = pd.DataFrame({'S#' : [100], 'Prerequisite 1': [5], 'Prerequisite 2': [5], 'Prerequisite 3': [5]})
-print(a_std)
+a_original = pd.DataFrame({'S#' : [100], 'Prerequisite 1': [5], 'Prerequisite 2': [5], 'Prerequisite 3': [5], 'Class Participation [100]' : [0], 'HW#1 [100]' : [0], 'HW#2 [100]' : [0], 'HW#3 [100]' : [0], 'Test#1 [100]' : [0], 'Test#2 [100]' : [0], 'Test#3 [100]' : [0], 'FinalExam [300]' : [0], 'Course Grade' : [0]})
+a_copy = a_original.copy()
+a_final = pd.DataFrame({'S#' : [100], 'Prerequisite 1': [5], 'Prerequisite 2': [5], 'Prerequisite 3': [5], 'Class Participation [100]' : [100], 'HW#1 [100]' : [90], 'HW#2 [100]' : [90], 'HW#3 [100]' : [90], 'Test#1 [100]' : [90], 'Test#2 [100]' : [90], 'Test#3 [100]' : [90], 'FinalExam [300]' : [270], 'Course Grade' : [5]})
+#print(a_std)
+#print(a_final)
 
 for i in features:
-    pred = knn.predict(a_std)
-    print(pred)
-    #print(knn.score(x_test, y_test)*100)
+    print("Feature: ", i)
+    x_train, x_test, y_train, y_test = train_test_split(dfr.drop(['S#', i], axis=1), dfr[i])
+    x_test = a_original.drop(['S#', i], axis=1)
+    y_test = a_final[i]
+    print("x: ", x_test)
+    print("y: ", y_test)
+    knn = KNeighborsClassifier(n_neighbors = 5, p = 2)
+    knn.fit(x_train, y_train)
+    pred = knn.predict(x_test)
+    print("Prediction: ", pred)
+    for j in a_final[i]:
+        print("Expected: ", j)
+        print("PE: ", acc(pred, j))
+    a_copy[i] = pred
+    print("\n===============\n")
+    
+print(a_original)
+print("\n===============\n")
+print(a_copy)
+print("\n===============\n")
+print(a_final)
 
 #dfr.append(a_std, ignore_index=True)
 #print(dfr)
 
 
-# In[10]:
+# In[14]:
 
 
 ###
@@ -124,7 +189,7 @@ for i in features:
 #x_train, x_test, y_train, y_test = train_test_split(dfr.drop(['S#', 'Course Grade'], axis=1), dfr['Course Grade'])
 
 
-# In[11]:
+# In[15]:
 
 
 #fe = []
@@ -135,7 +200,7 @@ for i in features:
 #    fe.append(np.mean(cross_val_score(knn, x_test, y_test, cv=5)))
 
 
-# In[12]:
+# In[16]:
 
 
 #k_star = np.argmin(fe)
