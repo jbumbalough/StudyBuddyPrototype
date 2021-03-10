@@ -144,6 +144,45 @@ predict(b_original)
 # In[13]:
 
 
+class GradeItem:
+    def __init__(self, p, q, t):
+        self.points = p
+        self.questions = q
+        self.topics = t
+
+
+# In[14]:
+
+
+h1 = GradeItem(100, ["q1", "q2", "q3"], ["t1"])
+print(h1.points)
+print(h1.questions)
+print(h1.topics)
+
+
+# In[15]:
+
+
+new_stud = pd.DataFrame({'S#' : [102], 'Prerequisite 1': [5], 'Prerequisite 2': [4], 'Prerequisite 3': [3], 'Class Participation [100]' : [0], GradeItem(100, ["q1", "q2", "q3"], ["t1"]) : [0], 'HW#2 [100]' : [0], 'HW#3 [100]' : [0], 'Test#1 [100]' : [0], 'Test#2 [100]' : [0], 'Test#3 [100]' : [0], 'FinalExam [300]' : [0], 'Course Grade' : [0]})
+new_stud
+
+
+# In[16]:
+
+
+#Recommending similar students
+x_train, x_test, y_train, y_test = train_test_split(dfr.drop(['S#'], axis=1), dfr['S#'])
+knn = KNeighborsClassifier(n_neighbors = 5, p = 2)
+knn.fit(x_train, y_train)
+pred = knn.predict(x_test)
+print(y_test)
+print(pred)
+print(knn.score(x_test, y_test)*100)
+
+
+# In[17]:
+
+
 ##Predicting each of the grade items over time, based on available previous data
 a_original = pd.DataFrame({'S#' : [100], 'Prerequisite 1': [5], 'Prerequisite 2': [5], 'Prerequisite 3': [5], 'Class Participation [100]' : [0], 'HW#1 [100]' : [0], 'HW#2 [100]' : [0], 'HW#3 [100]' : [0], 'Test#1 [100]' : [0], 'Test#2 [100]' : [0], 'Test#3 [100]' : [0], 'FinalExam [300]' : [0], 'Course Grade' : [0]})
 a_copy = a_original.copy()
@@ -178,7 +217,7 @@ print(a_final)
 #print(dfr)
 
 
-# In[14]:
+# In[18]:
 
 
 ###
@@ -189,7 +228,7 @@ print(a_final)
 #x_train, x_test, y_train, y_test = train_test_split(dfr.drop(['S#', 'Course Grade'], axis=1), dfr['Course Grade'])
 
 
-# In[15]:
+# In[19]:
 
 
 #fe = []
@@ -200,7 +239,7 @@ print(a_final)
 #    fe.append(np.mean(cross_val_score(knn, x_test, y_test, cv=5)))
 
 
-# In[16]:
+# In[20]:
 
 
 #k_star = np.argmin(fe)
