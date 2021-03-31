@@ -13,17 +13,20 @@ class Topic:
         self.materials.append(new_material)
 
     def show(self):
-        print(self.materials)
+        print("For Topic: ", self.name)
+        print("You should study ", self.materials)
 
 
 Greedy = Topic('CS 210 Greedy Approach')
 Greedy.add_material('Lesson 7 Slides')
 Greedy.add_material('Foundations of Algorithms 5th ed. Chapter 4')
 
-for x in range(len(Greedy.materials)):
-    print(Greedy.materials[x]),
+#for x in range(len(Greedy.materials)):
+#   print(Greedy.materials[x]),
 
-print(Greedy.name)
+#print(Greedy.name)
+
+Greedy.show()
 
 
 # Press the green button in the gutter to run the script.
